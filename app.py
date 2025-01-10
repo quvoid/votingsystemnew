@@ -102,6 +102,27 @@ class VotingSystem:
         self.voters = VoterHashTable()
         self.total_votes = 0
 
+    def get_candidates_list(self):
+        candidates = []
+        current = self.candidates.head
+        while current:
+            candidates.append({
+                'candidate_id': current.candidate_id,
+                'name': current.candidate_name
+            })
+            current = current.next
+        return candidates
+
+    def get_candidate_votes(self, candidate_id):
+        candidate = self.candidates.find_candidate(candidate_id)
+        return candidate.votes if candidate else 0
+
+    def get_voting_statistics(self):
+        return {
+            'total_candidates': len(self.get_candidates_list()),
+            'total_votes': self.total_votes
+        }
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -152,7 +173,7 @@ def reset_voting():
 if __name__ == '__main__':
     # Add some initial candidates
     voting_system.add_candidate("1", "Bhartiya Janta Party")
-    voting_system.add_candidate("2", "Indian National Congress")
-    voting_system.add_candidate("3", "Aam Aadmi Party")
-    voting_system.add_candidate("4", "RSS")
+    voting_system.add_candidate("2", "India National Congress")
+    voting_system.add_candidate("3", "RSS")
+    voting_system.add_candidate("4", "Aam Aadmi Party")
     app.run(debug=True)
