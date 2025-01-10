@@ -123,6 +123,21 @@ class VotingSystem:
             'total_votes': self.total_votes
         }
 
+    def get_candidate_by_id(self, candidate_id):
+        return self.candidates.find_candidate(candidate_id)
+
+    def get_all_voter_ids(self):
+        voter_ids = []
+        for bucket in self.voters.table:
+            voter_ids.extend(bucket)
+        return voter_ids
+
+    def get_candidate_vote_percentage(self, candidate_id):
+        candidate = self.candidates.find_candidate(candidate_id)
+        if candidate:
+            return (candidate.votes / self.total_votes * 100) if self.total_votes > 0 else 0
+        return 0
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -173,7 +188,8 @@ def reset_voting():
 if __name__ == '__main__':
     # Add some initial candidates
     voting_system.add_candidate("1", "Bhartiya Janta Party")
-    voting_system.add_candidate("2", "India National Congress")
-    voting_system.add_candidate("3", "RSS")
+    voting_system.add_candidate("2", "Indian National Congress")
+    voting_system.add_candidate("3", "Bahujan Samaj Party")
     voting_system.add_candidate("4", "Aam Aadmi Party")
+    
     app.run(debug=True)
