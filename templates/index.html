@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Voting System</h1>
+    <p>Please cast your vote!</p>
+
+    <h2>Voting Results</h2>
+    <table>
+        <tr>
+            <th>Candidate ID</th>
+            <th>Name</th>
+            <th>Votes</th>
+            <th>Percentage</th>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.candidate_id }}</td>
+            <td>{{ result.name }}</td>
+            <td>{{ result.votes }}</td>
+            <td>{{ result.percentage }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Total Votes: {{ total_votes }}</h2>
+
+    <h2>Cast Your Vote</h2>
+    <form action="{{ url_for('vote') }}" method="post">
+        <label for="voter_id">Voter ID:</label>
+        <input type="text" id="voter_id" name="voter_id" required>
+        <label for="candidate_id">Candidate ID:</label>
+        <input type="text" id="candidate_id" name="candidate_id" required>
+        <button type="submit">Vote</button>
+    </form>
+
+    <h2>Add a Candidate</h2>
+    <form action="{{ url_for('add_candidate') }}" method="post">
+        <label for="candidate_id">Candidate ID:</label>
+        <input type="text" id="candidate_id" name="candidate_id" required>
+        <label for="candidate_name">Candidate Name:</label>
+        <input type="text" id="candidate_name" name="candidate_name" required>
+        <button type="submit">Add Candidate</button>
+    </form>
+
+    <h2>Search for a Candidate</h2>
+    <form action="{{ url_for('find_candidate') }}" method="post">
+        <label for="candidate_name">Candidate Name:</label>
+        <input type="text" id="candidate_name" name="candidate_name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Reset Voting</h2>
+    <form action="{{ url_for('reset_voting') }}" method="post">
+        <button type="submit">Reset Voting</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
